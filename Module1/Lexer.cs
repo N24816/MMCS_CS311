@@ -65,40 +65,51 @@ namespace Lexer
             intString = new System.Text.StringBuilder();
         }
 
-        public override bool Parse()
-        {
-            NextCh();
-            if (currentCh == '+' || currentCh == '-')
-            {
-                NextCh();
-            }
-        
-            if (char.IsDigit(currentCh))
-            {
-                NextCh();
-            }
-            else
-            {
-                Error();
-            }
+		public override bool Parse()
+		{
+			bool isNegative = false;
+			NextCh();
+			if (currentCh == '+' || currentCh == '-')
+			{
+				if (currentCh == '-')
+				{
+					isNegative = true;
+				}
+				NextCh();
+			}
 
-            while (char.IsDigit(currentCh))
-            {
-                NextCh();
-            }
+			if (char.IsDigit(currentCh))
+			{
+				parseResult = parseResult * 10 + int.Parse(currentCh.ToString());
+				NextCh();
+			}
+			else
+			{
+				Error();
+			}
+
+			while (char.IsDigit(currentCh))
+			{
+				parseResult = parseResult * 10 + int.Parse(currentCh.ToString());
+				NextCh();
+			}
 
 
-            if (currentCharValue != -1)
-            {
-                Error();
-            }
+			if (currentCharValue != -1)
+			{
+				Error();
+			}
 
-            return true;
+			if (isNegative == true)
+			{
+				parseResult *= -1;
+			}
+			return true;
 
-        }
-    }
-    
-    public class IdentLexer : Lexer
+		}
+	}
+
+	public class IdentLexer : Lexer
     {
         private string parseResult;
         protected StringBuilder builder;
