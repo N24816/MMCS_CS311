@@ -125,11 +125,25 @@ namespace Lexer
         }
 
         public override bool Parse()
-        { 
-            throw new NotImplementedException();
-        }
-       
-    }
+		{
+			NextCh();
+			if (!char.IsLetter(currentCh) && currentCh != '_')
+			{
+				Error();
+			}
+			while (char.IsLetter(currentCh) || currentCh == '_' || char.IsDigit(currentCh))
+			{
+				NextCh();
+			}
+			if (currentCharValue != -1)
+			{
+				Error();
+			}
+			parseResult = inputString;
+			return true;
+		}
+
+	}
 
     public class IntNoZeroLexer : IntLexer
     {
