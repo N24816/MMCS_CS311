@@ -69,7 +69,8 @@ namespace Lexer
 		{
 			bool isNegative = false;
 			NextCh();
-			if (currentCh == '+' || currentCh == '-')
+            int value = 0;
+            if (currentCh == '+' || currentCh == '-')
 			{
 				if (currentCh == '-')
 				{
