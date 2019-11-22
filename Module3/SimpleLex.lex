@@ -5,6 +5,7 @@ Alpha 	[a-zA-Z_]
 Digit   [0-9] 
 AlphaDigit {Alpha}|{Digit}
 INTNUM  {Digit}+
+COMMENT \/\/[^\r\n]*
 REALNUM {INTNUM}\.{INTNUM}
 ID {Alpha}{AlphaDigit}* 
 
@@ -23,6 +24,10 @@ ID {Alpha}{AlphaDigit}*
 {REALNUM} { 
   LexValueDouble = double.Parse(yytext);
   return (int)Tok.RNUM;
+}
+
+{COMMENT} {
+  return (int)Tok.COMMENT;
 }
 
 begin { 
