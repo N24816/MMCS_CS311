@@ -32,6 +32,11 @@ namespace SimpleLangParser
             if (l.LexKind == Tok.ID || l.LexKind == Tok.INUM)
             {
                 l.NextLexem();
+                    if (l.LexKind == Tok.PLUS || l.LexKind == Tok.MINUS)
+                    {
+                        l.NextLexem();
+                        Expr();
+                    }
             }
             else
             {
@@ -52,7 +57,37 @@ namespace SimpleLangParser
             Expr();
         }
 
-        public void StatementList() 
+        public void For()
+        {
+            if (l.LexKind != Tok.FOR)
+            {
+                SyntaxError("for expected");
+            }
+            l.NextLexem();
+            Assign();
+            if (l.LexKind != Tok.TO)
+            {
+                SyntaxError("to expected");
+            }
+            l.NextLexem();
+            Expr();
+            if (l.LexKind != Tok.DO)
+            {
+                SyntaxError("do expected");
+            }
+            l.NextLexem();
+            if (l.LexKind == Tok.BEGIN)
+            {
+                Block();
+            }
+            else
+            {
+                Statement();
+            }
+
+        }
+
+        public void StatementList()
         {
             Statement();
             while (l.LexKind == Tok.SEMICOLON)
@@ -79,6 +114,11 @@ namespace SimpleLangParser
                 case Tok.ID:
                     {
                         Assign();
+                        break;
+                    }
+                case Tok.FOR:
+                    {
+                        For();
                         break;
                     }
                 default:

@@ -107,6 +107,9 @@ namespace SimpleLexer
             keywordsMap["notmod"] = Tok.ID;
             keywordsMap["anddiv"] = Tok.ID;
             keywordsMap["modor"] = Tok.ID;
+            keywordsMap["for"] = Tok.FOR;
+            keywordsMap["to"] = Tok.TO;
+            keywordsMap["do"] = Tok.DO;
         }
 
         public string FinishCurrentLine()
