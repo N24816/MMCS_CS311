@@ -9,6 +9,11 @@ namespace SimpleLang.Visitors
     public class AssignCountVisitor : AutoVisitor
     {
         public int Count = 0;
-        
+        public override void VisitAssignNode(AssignNode a)
+        {
+            Count += 1;
+            base.VisitAssignNode(a);
+        }
+
     }
 }
