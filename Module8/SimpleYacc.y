@@ -24,13 +24,13 @@
 
 %start progr
 
-%token BEGIN END CYCLE ASSIGN ASSIGNPLUS ASSIGNMINUS ASSIGNMULT SEMICOLON WRITE VAR PLUS MINUS MULT DIV LPAREN RPAREN COLUMN
+%token BEGIN END CYCLE ASSIGN ASSIGNPLUS ASSIGNMINUS ASSIGNMULT SEMICOLON WRITE VAR PLUS MINUS MULT DIV LPAREN RPAREN COLUMN REMINDER FOR TO
 %token <iVal> INUM 
 %token <dVal> RNUM 
 %token <sVal> ID
 
 %type <eVal> expr ident T F 
-%type <stVal> statement assign block cycle write empty var varlist 
+%type <stVal> statement assign block cycle write empty var varlist for
 %type <blVal> stlist block
 
 %%
@@ -52,6 +52,7 @@ stlist	: statement
 statement: assign { $$ = $1; }
 		| block   { $$ = $1; }
 		| cycle   { $$ = $1; }
+		| for	  { $$ = $1; }
 		| write   { $$ = $1; }
 		| var     { $$ = $1; }
 		| empty   { $$ = $1; }
@@ -79,6 +80,7 @@ expr	: expr PLUS T { $$ = new BinOpNode($1,$3,'+'); }
 		
 T 		: T MULT F { $$ = new BinOpNode($1,$3,'*'); }
 		| T DIV F { $$ = new BinOpNode($1,$3,'/'); }
+		| T REMINDER F { $$ = new BinOpNode($1,$3,'%'); }
 		| F { $$ = $1; }
 		;
 		
@@ -91,6 +93,9 @@ block	: BEGIN stlist END { $$ = $2; }
 		;
 
 cycle	: CYCLE expr statement { $$ = new CycleNode($2,$3); }
+		;
+
+for		: FOR assign TO expr statement { $$ = new ForNode($2 as AssignNode,$4,$5); }
 		;
 		
 write	: WRITE LPAREN expr RPAREN { $$ = new WriteNode($3); }

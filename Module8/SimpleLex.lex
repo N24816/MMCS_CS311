@@ -42,6 +42,7 @@ ID {Alpha}{AlphaDigit}*
 "(" { return (int)Tokens.LPAREN; }
 ")" { return (int)Tokens.RPAREN; }
 "," { return (int)Tokens.COLUMN; }
+"%" { return (int)Tokens.REMINDER; }
 
 [^ \r\n] {
 	LexError();
@@ -78,6 +79,8 @@ class ScannerHelper
     keywords.Add("cycle",(int)Tokens.CYCLE);
     keywords.Add("write",(int)Tokens.WRITE);
     keywords.Add("var",(int)Tokens.VAR);
+	keywords.Add("for",(int)Tokens.FOR);
+	keywords.Add("to",(int)Tokens.TO);
   }
   public static int GetIDToken(string s)
   {

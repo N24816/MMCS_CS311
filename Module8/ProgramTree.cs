@@ -86,6 +86,22 @@ namespace ProgramTree
             v.VisitCycleNode(this);
         }
     }
+    public class ForNode : StatementNode
+    {
+        public AssignNode Assign { get; set; }
+        public ExprNode Expr { get; set; }
+        public StatementNode Stat { get; set; }
+        public ForNode(AssignNode assign, ExprNode expr, StatementNode stat)
+        {
+            Assign = assign;
+            Expr = expr;
+            Stat = stat;
+        }
+        public override void Visit(Visitor v)
+        {
+            v.VisitForNode(this);
+        }
+    }
 
     public class BlockNode : StatementNode
     {

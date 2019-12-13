@@ -103,5 +103,15 @@ namespace SimpleLang.Visitors
                 IndentMinus();
             }
         }
+
+        public override void VisitForNode(ForNode c)
+        {
+            Text += IndentStr() + "for ";
+            c.Assign.Visit(this);
+            Text += IndentStr() + " to ";
+            c.Expr.Visit(this);
+            Text += Environment.NewLine;
+            c.Stat.Visit(this);
+        }
     }
 }

@@ -22,7 +22,8 @@ namespace SimpleLang.Visitors
             // Т.е. он вызывается только если id находится в выражении, а значит, мы просто кладем его значение на стек!
             genc.Emit(OpCodes.Ldloc, vars[id.Name]);
         }
-        public override void VisitIntNumNode(IntNumNode num) 
+
+        public override void VisitIntNumNode(IntNumNode num)
         {
             genc.Emit(OpCodes.Ldc_I4, num.Num);
         }
@@ -43,6 +44,9 @@ namespace SimpleLang.Visitors
                     break;
                 case '/':
                     genc.Emit(OpCodes.Div);
+                    break;
+                case '%':
+                    genc.Emit(OpCodes.Rem);
                     break;
             }
         }
@@ -77,7 +81,36 @@ namespace SimpleLang.Visitors
 
             genc.MarkLabel(endLoop);
         }
-        public override void VisitBlockNode(BlockNode bl) 
+
+        public override void VisitForNode(ForNode c)
+        {
+            c.Assign.Visit(this);
+            c.Expr.Visit(this);
+            var limit = genc.DeclareLocal(typeof(int)); // переменная цикла cycle
+            genc.Emit(OpCodes.Stloc, limit);
+            Label startLoop = genc.DefineLabel();
+            Label endLoop = genc.DefineLabel();
+
+            genc.MarkLabel(startLoop);
+
+            genc.Emit(OpCodes.Ldloc, vars[c.Assign.Id.Name]);
+            genc.Emit(OpCodes.Ldloc, limit);
+            genc.Emit(OpCodes.Bge, endLoop);
+
+            c.Stat.Visit(this);
+
+            genc.Emit(OpCodes.Ldloc, vars[c.Assign.Id.Name]);
+            genc.Emit(OpCodes.Ldc_I4_1);
+            genc.Emit(OpCodes.Add);
+            genc.Emit(OpCodes.Stloc, vars[c.Assign.Id.Name]);
+
+            genc.Emit(OpCodes.Br, startLoop);
+
+            genc.MarkLabel(endLoop);
+
+        }
+
+        public override void VisitBlockNode(BlockNode bl)
         {
             foreach (var st in bl.StList)
                 st.Visit(this);

@@ -43,7 +43,7 @@ namespace SimpleCompiler
                     var code = new GenCodeVisitor();
                     parser.root.Visit(code);
                     code.EndProgram();
-                    //code.PrintCommands();
+                    code.PrintCommands();
                     Console.WriteLine("-------------------------------");
 
                     code.RunProgram();

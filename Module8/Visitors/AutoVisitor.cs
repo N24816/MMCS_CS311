@@ -50,5 +50,12 @@ namespace SimpleLang.Visitors
                 cond.ifFalse.Visit(this);
             }
         }
+
+        public override void VisitForNode(ForNode c)
+        {
+            c.Assign.Visit(this);
+            c.Expr.Visit(this);
+            c.Stat.Visit(this);
+        }
     }
 }
