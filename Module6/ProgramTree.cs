@@ -3,6 +3,7 @@
 namespace ProgramTree
 {
     public enum AssignType { Assign, AssignPlus, AssignMinus, AssignMult, AssignDivide };
+    public enum OpType { PLUS, MINUS, MULT, DELIM };
 
     public class Node // базовый класс для всех узлов    
     {
@@ -10,6 +11,20 @@ namespace ProgramTree
 
     public class ExprNode : Node // базовый класс для всех выражений
     {
+
+    }
+
+    public class BinaryOperation : ExprNode
+    {
+        public ExprNode Left;
+        public ExprNode Right;
+        public OpType OperationType;
+        public BinaryOperation(ExprNode left, ExprNode right, OpType operationType)
+        {
+            Left = left;
+            Right = right;
+            OperationType = operationType;
+        }
     }
 
     public class IdNode : ExprNode
@@ -22,6 +37,12 @@ namespace ProgramTree
     {
         public int Num { get; set; }
         public IntNumNode(int num) { Num = num; }
+    }
+
+    public class DoubleNumNode : ExprNode
+    {
+        public double Num { get; set; }
+        public DoubleNumNode(double num) { Num = num; }
     }
 
     public class StatementNode : Node // базовый класс для всех операторов
@@ -38,6 +59,17 @@ namespace ProgramTree
             Id = id;
             Expr = expr;
             AssOp = assop;
+        }
+    }
+
+    public class RepeatNode : StatementNode
+    {
+        public BlockNode Statements { get; set; }
+        public ExprNode Expr { get; set; }
+        public RepeatNode(BlockNode statements, ExprNode expr)
+        {
+            Statements = statements;
+            Expr = expr;
         }
     }
 
